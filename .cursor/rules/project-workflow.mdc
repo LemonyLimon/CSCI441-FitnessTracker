@@ -1,0 +1,18 @@
+---
+description: Repo-specific workflow for this full-stack template
+alwaysApply: true
+---
+
+# Project Workflow
+
+- Prefer root scripts over ad-hoc commands:
+  - `npm run dev`
+  - `npm run lint`
+  - `npm run tsc`
+  - `npm run db:import`
+- Keep boundaries clear:
+  - frontend app code in `client/`
+  - backend API/auth code in `server/`
+  - SQL schema/data changes in `database/`
+- If env requirements change, update both `server/.env.example` and setup docs.
+- Keep onboarding docs current when commands, scripts, or setup flow changes.

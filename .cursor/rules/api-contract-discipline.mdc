@@ -1,0 +1,31 @@
+---
+description: Keep API contracts stable and synchronized across client/server
+globs: "**/*.{ts,tsx,js,jsx,md}"
+alwaysApply: false
+---
+
+# API Contract Discipline
+
+Apply when changing request/response behavior, status codes, or route semantics.
+
+## Required updates when API behavior changes
+
+- backend route/controller/service implementation
+- shared contract types when wire shape changes
+- client call sites that consume changed endpoints
+- tests for affected routes and client behavior
+- API docs/reference updates
+
+## Contract consistency rules
+
+- keep envelope semantics consistent:
+  - success: `data` (+ optional metadata)
+  - error: `error` (+ optional metadata)
+- keep status codes intentional and stable
+- avoid breaking response shapes silently
+
+## Ownership and auth
+
+- protected routes must use auth middleware
+- never trust client-provided `userId` for ownership decisions
+- service queries must enforce owner filters for user-owned data

@@ -1,0 +1,22 @@
+---
+description: Definition of done for substantial implementation changes
+globs: "**/*.{ts,tsx,js,jsx,md,mdc}"
+alwaysApply: false
+---
+
+# Definition of Done
+
+For any substantial feature, fix, or refactor, completion requires:
+
+- code implementation is complete and coherent
+- tests are added/updated for changed behavior
+- docs are updated when behavior/workflow changes
+- changelog/release notes are updated when the project uses them
+- project quality checks pass (lint, typecheck, test, build)
+
+## Final handoff should include
+
+- what changed
+- validation commands run and outcomes
+- known limitations or follow-ups
+- rollback/risk note for impactful changes

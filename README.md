@@ -1,5 +1,20 @@
 # Workout Tracker
 
+## Cursor Quick Start
+
+This repository is ready to use in Cursor after cloning.
+
+1. Open the folder in Cursor.
+2. Run `npm install` from the repo root.
+3. Copy env vars: `cp server/.env.example server/.env`.
+4. Edit `server/.env` and set `DATABASE_URL` and `TOKEN_SECRET`.
+5. Start development servers: `npm run dev`.
+
+Notes:
+- Shared Cursor project rules live in `.cursor/rules/` and are committed to git.
+- If you use Dev Containers, this repo includes `.devcontainer/devcontainer.json`.
+- `.vscode` settings are intentionally not shared in this project.
+
 #### Getting Started
 
 1. Install all dependencies with `npm install`.

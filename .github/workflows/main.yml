@@ -43,7 +43,7 @@ jobs:
           remote_user: ec2-user
           remote_key: "${{ env.SSH_PRIVATE_KEY }}"
       - name: Install and run on EC2
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ env.EC2_HOST }}
           username: ec2-user

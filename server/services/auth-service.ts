@@ -13,6 +13,7 @@ export type SessionUser = {
   email: string | null;
   displayName: string;
   isGuest: boolean;
+  standardUnits: boolean;
   uiHighContrast: boolean;
   uiTextSize: string;
   height: number | null;
@@ -28,6 +29,7 @@ export type UserRowForPublic = {
   email: string | null;
   displayName: string;
   isGuest: boolean;
+  standardUnits: boolean;
   uiHighContrast: boolean;
   uiTextSize: string;
   passwordHash: string | null;
@@ -64,6 +66,7 @@ export const usersPublicReturning = {
   email: users.email,
   displayName: users.displayName,
   isGuest: users.isGuest,
+  standardUnits: users.standardUnits,
   uiHighContrast: users.uiHighContrast,
   uiTextSize: users.uiTextSize,
   passwordHash: users.passwordHash,
@@ -80,6 +83,7 @@ export function userRowToSessionUser(row: UserRowForPublic): SessionUser {
     email: row.email,
     displayName: row.displayName,
     isGuest: row.isGuest,
+    standardUnits: row.standardUnits,
     uiHighContrast: row.uiHighContrast,
     uiTextSize: row.uiTextSize,
     height: row.height,
@@ -169,7 +173,9 @@ export async function updateMyPreferences(
       ...(prefs.uiHighContrast !== undefined
         ? { uiHighContrast: prefs.uiHighContrast }
         : {}),
-      ...(prefs.uiTextSize !== undefined ? { uiTextSize: prefs.uiTextSize } : {}),
+      ...(prefs.uiTextSize !== undefined
+        ? { uiTextSize: prefs.uiTextSize }
+        : {}),
       updatedAt: sql`now()`,
     })
     .where(eq(users.userId, userId))

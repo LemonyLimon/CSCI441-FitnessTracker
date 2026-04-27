@@ -21,6 +21,7 @@ export const users = pgTable('users', {
   displayName: text('displayName').notNull(),
   uiHighContrast: boolean('uiHighContrast').notNull().default(false),
   uiTextSize: text('uiTextSize').notNull().default('normal'),
+  standardUnits: boolean('standardUnits').notNull().default(true),
   createdAt: timestamp('createdAt', { withTimezone: true })
     .notNull()
     .defaultNow(),

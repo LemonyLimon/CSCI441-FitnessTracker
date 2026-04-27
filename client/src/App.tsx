@@ -29,6 +29,7 @@ type User = {
   email: string | null;
   displayName: string;
   isGuest: boolean;
+  standardUnits: boolean;
   uiHighContrast: boolean;
   uiTextSize: string;
   height: number | null;

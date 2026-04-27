@@ -15,6 +15,7 @@ create table "users" (
   "displayName" text not null,
   "uiHighContrast" boolean not null default false,
   "uiTextSize" text not null default 'normal',
+  "standardUnits" boolean not null default true,
   "createdAt" timestamptz not null default now(),
   "updatedAt" timestamptz not null default now(),
   "height" integer,

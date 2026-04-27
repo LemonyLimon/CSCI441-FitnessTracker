@@ -1,7 +1,11 @@
 import { and, desc, eq, sql } from 'drizzle-orm';
 import { DbClient, getDrizzleDb } from '@server/db/drizzle.js';
-import { workouts } from '@server/db/schema.js';
+import { users, workouts } from '@server/db/schema.js';
 import { ClientError } from '@server/lib/client-error.js';
+import {
+  type UnitSystem,
+  unitSystemFromStandardUnits,
+} from '@server/lib/unit-conversion.js';
 
 /** Return configured DB client or fail with setup guidance. */
 function requireDb(): DbClient {
@@ -29,6 +33,18 @@ export type WorkoutRecord = {
   userWeight: string | null;
   reps: number | null;
 };
+
+/** Load user's preferred display unit system from `users.standardUnits`. */
+export async function readUserUnitSystem(userId: number): Promise<UnitSystem> {
+  const db = requireDb();
+  const [row] = await db
+    .select({ standardUnits: users.standardUnits })
+    .from(users)
+    .where(eq(users.userId, userId))
+    .limit(1);
+  if (!row) throw new ClientError(404, 'user not found');
+  return unitSystemFromStandardUnits(row.standardUnits);
+}
 
 /** List workouts for one owner, newest first. */
 export async function listWorkouts(userId: number): Promise<WorkoutRecord[]> {

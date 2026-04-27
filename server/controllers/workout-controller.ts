@@ -2,11 +2,17 @@ import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 import { sendSuccess } from '@server/lib/http-response.js';
 import { requireUserId } from '@server/lib/request-user.js';
+import {
+  displayWeightToPounds,
+  poundsToDisplayWeight,
+  type UnitSystem,
+} from '@server/lib/unit-conversion.js';
 import { assertExerciseAssignableToUser } from '@server/services/exercise-type-service.js';
 import {
   createWorkout,
   deleteWorkout,
   listWorkouts,
+  readUserUnitSystem,
   updateWorkout,
 } from '@server/services/workout-service.js';
 
@@ -38,20 +44,23 @@ const patchWorkoutBody = z.object({
 });
 
 /** Convert DB date fields to API-safe ISO strings. */
-function serializeWorkout(w: {
-  workoutId: number;
-  userId: number;
-  title: string;
-  notes: string | null;
-  exerciseTypeId: number | null;
-  startedAt: Date;
-  endedAt: Date | null;
-  durationMinutes: number | null;
-  createdAt: Date;
-  updatedAt: Date;
-  userWeight: string | null;
-  reps: number | null;
-}): {
+function serializeWorkout(
+  w: {
+    workoutId: number;
+    userId: number;
+    title: string;
+    notes: string | null;
+    exerciseTypeId: number | null;
+    startedAt: Date;
+    endedAt: Date | null;
+    durationMinutes: number | null;
+    createdAt: Date;
+    updatedAt: Date;
+    userWeight: string | null;
+    reps: number | null;
+  },
+  unitSystem: UnitSystem,
+): {
   workoutId: number;
   userId: number;
   title: string;
@@ -62,9 +71,10 @@ function serializeWorkout(w: {
   durationMinutes: number | null;
   createdAt: string;
   updatedAt: string;
-  userWeight: string | null;
+  userWeight: number | null;
   reps: number | null;
 } {
+  const storedPounds = w.userWeight != null ? Number(w.userWeight) : null;
   return {
     workoutId: w.workoutId,
     userId: w.userId,
@@ -76,7 +86,7 @@ function serializeWorkout(w: {
     durationMinutes: w.durationMinutes,
     createdAt: w.createdAt.toISOString(),
     updatedAt: w.updatedAt.toISOString(),
-    userWeight: w.userWeight,
+    userWeight: poundsToDisplayWeight(storedPounds, unitSystem),
     reps: w.reps,
   };
 }
@@ -88,10 +98,14 @@ export async function getWorkouts(
   next: NextFunction,
 ): Promise<void> {
   try {
-    const rows = await listWorkouts(requireUserId(req));
+    const userId = requireUserId(req);
+    const [rows, unitSystem] = await Promise.all([
+      listWorkouts(userId),
+      readUserUnitSystem(userId),
+    ]);
     sendSuccess(
       res,
-      rows.map((row) => serializeWorkout(row)),
+      rows.map((row) => serializeWorkout(row, unitSystem)),
     );
   } catch (err) {
     next(err);
@@ -106,6 +120,7 @@ export async function postWorkout(
 ): Promise<void> {
   try {
     const userId = requireUserId(req);
+    const unitSystem = await readUserUnitSystem(userId);
     const body = createWorkoutBody.parse(req.body);
     // `endedAt` accepts either explicit null, omitted, or ISO string.
     const endedAt =
@@ -124,10 +139,10 @@ export async function postWorkout(
       startedAt: body.startedAt ? new Date(body.startedAt) : undefined,
       endedAt,
       durationMinutes: body.durationMinutes,
-      userWeight: String(body.userWeight),
+      userWeight: String(displayWeightToPounds(body.userWeight, unitSystem)),
       reps: body.reps,
     });
-    sendSuccess(res, serializeWorkout(created), 201);
+    sendSuccess(res, serializeWorkout(created, unitSystem), 201);
   } catch (err) {
     next(err);
   }
@@ -141,6 +156,7 @@ export async function patchWorkout(
 ): Promise<void> {
   try {
     const userId = requireUserId(req);
+    const unitSystem = await readUserUnitSystem(userId);
     const { workoutId } = workoutIdParams.parse(req.params);
     const body = patchWorkoutBody.parse(req.body);
     // Preserve omitted field vs explicit null semantics.
@@ -161,11 +177,15 @@ export async function patchWorkout(
       endedAt,
       durationMinutes: body.durationMinutes,
       ...(body.userWeight !== undefined
-        ? { userWeight: String(body.userWeight) }
+        ? {
+            userWeight: String(
+              displayWeightToPounds(body.userWeight, unitSystem),
+            ),
+          }
         : {}),
       ...(body.reps !== undefined ? { reps: body.reps } : {}),
     });
-    sendSuccess(res, serializeWorkout(updated));
+    sendSuccess(res, serializeWorkout(updated, unitSystem));
   } catch (err) {
     next(err);
   }

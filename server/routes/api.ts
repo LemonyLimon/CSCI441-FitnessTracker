@@ -35,6 +35,7 @@ import {
   putUserProfile,
   resetProfileFields,
 } from '@server/controllers/profile-controller.js';
+import { getMyStats } from '@server/controllers/stats-controller.js';
 import {
   getWorkouts,
   patchWorkout,
@@ -51,6 +52,7 @@ apiRouter.get('/ready', readReady);
 apiRouter.post('/auth/guest', postAuthGuest);
 apiRouter.post('/auth/sign-in', postAuthSignIn);
 apiRouter.get('/me', authMiddleware, getMe);
+apiRouter.get('/me/stats', authMiddleware, getMyStats);
 apiRouter.patch('/me/preferences', authMiddleware, patchMePreferences);
 apiRouter.get('/me/goals', authMiddleware, getGoals);
 apiRouter.post('/me/goals', authMiddleware, postGoal);

@@ -14,6 +14,7 @@ export type SessionUser = {
   displayName: string;
   isGuest: boolean;
   standardUnits: boolean;
+  memberSinceYear: number;
   uiHighContrast: boolean;
   uiTextSize: string;
   height: number | null;
@@ -84,6 +85,7 @@ export function userRowToSessionUser(row: UserRowForPublic): SessionUser {
     displayName: row.displayName,
     isGuest: row.isGuest,
     standardUnits: row.standardUnits,
+    memberSinceYear: row.createdAt.getUTCFullYear(),
     uiHighContrast: row.uiHighContrast,
     uiTextSize: row.uiTextSize,
     height: row.height,

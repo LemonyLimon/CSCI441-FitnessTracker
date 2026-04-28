@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
+import { env } from '@server/config/env.js';
+import { ClientError } from '@server/lib/client-error.js';
 import { sendSuccess } from '@server/lib/http-response.js';
 import { requireUserId } from '@server/lib/request-user.js';
 import {
@@ -35,6 +37,9 @@ export async function postAuthGuest(
   next: NextFunction,
 ): Promise<void> {
   try {
+    if (!env.AUTH_DEMO_ENABLED) {
+      throw new ClientError(403, 'demo auth is disabled; use OpenID Connect');
+    }
     const result = await createGuestSession();
     sendSuccess(res, result, 201);
   } catch (err) {
@@ -49,6 +54,9 @@ export async function postAuthSignIn(
   next: NextFunction,
 ): Promise<void> {
   try {
+    if (!env.AUTH_DEMO_ENABLED) {
+      throw new ClientError(403, 'demo auth is disabled; use OpenID Connect');
+    }
     const body = signInBody.parse(req.body);
     const result = await signInUser(body.email, body.password);
     sendSuccess(res, result);

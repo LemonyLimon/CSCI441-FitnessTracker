@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1775056258855,
+      "tag": "0002_fine_sandman",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1743600000000,
+      "tag": "0003_goals_profile_extensions",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1776046000000,
+      "tag": "0004_workout_reps",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1776504985622,
+      "tag": "0005_camelcase_columns",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1776800000000,
+      "tag": "0006_exercise_goal_pk_names",
+      "breakpoints": true
+    }
+  ]
+}

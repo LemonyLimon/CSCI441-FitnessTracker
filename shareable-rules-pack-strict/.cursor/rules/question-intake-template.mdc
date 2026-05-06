@@ -1,0 +1,55 @@
+---
+description: Reusable template for improving incomplete technical questions
+alwaysApply: true
+---
+
+# Question Intake Template
+
+Use this template when a user question is incomplete, ambiguous, or missing debug context.
+
+## Goal
+
+Help users submit complete, high-signal questions quickly so answers are accurate and actionable.
+
+## Response behavior
+
+- Ask for missing details in a concise, structured format.
+- Prefer concrete facts over summaries.
+- Keep requests lightweight: ask only for details needed to unblock.
+- If user is under time pressure, provide a best-effort answer first, then request the minimum missing context.
+
+## Suggested intake checklist (share with user)
+
+Please include:
+
+1. What are you trying to do?
+2. What have you already tried?
+3. What did you expect to happen?
+4. What actually happened?
+5. Exact complete error message (copy/paste text).
+6. Relevant code snippet (not screenshot).
+7. UI issue only: screenshot or short video showing incorrect behavior.
+8. Environment context:
+   - command run
+   - branch name
+   - OS/runtime versions if relevant
+
+## Prompt coaching suggestions
+
+Offer users this prompt structure:
+
+```txt
+Goal:
+What I tried:
+Expected result:
+Actual result:
+Error message:
+Relevant code:
+Environment/command:
+```
+
+## Quality guardrails
+
+- If request is still vague after one round, ask 1-2 targeted follow-ups.
+- Do not fabricate missing facts.
+- Avoid over-questioning when enough context exists to proceed.

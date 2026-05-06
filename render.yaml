@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: csci441-fitness-tracker-api
+    env: node
+    plan: starter
+    rootDir: .
+    autoDeploy: true
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm run build
+    preDeployCommand: corepack enable && pnpm run db:migrate && pnpm run db:seed
+    startCommand: corepack enable && pnpm run start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: NODE_ENV
+        value: production
+      - key: TOKEN_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_SSL
+        value: "true"
+      - key: CORS_ORIGIN
+        sync: false
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 900000
+      - key: RATE_LIMIT_MAX
+        value: 200
+      - key: RATE_LIMIT_WRITE_MAX
+        value: 60

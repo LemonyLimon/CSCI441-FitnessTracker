@@ -1,0 +1,11 @@
+node_modules
+.pnpm-store
+.DS_Store
+.vscode
+*.log
+.env
+coverage
+client/coverage
+server/coverage
+goal-routes.test.ts
+profile-routes.test.ts

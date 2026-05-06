@@ -1,0 +1,28 @@
+---
+description: Trigger consistency and abstraction checks after major feature updates
+globs: "**/*.{ts,tsx,js,jsx,md}"
+alwaysApply: false
+---
+
+# Post-Feature Refactor Trigger
+
+After a major feature or multi-file change, run a short consistency pass before closing work.
+
+## Trigger conditions
+
+- multiple endpoints or data flows changed
+- UI + API + DB touched in one feature
+- large PR or broad refactor
+
+## Required consistency checklist
+
+- naming/style consistency with existing project patterns
+- duplicate logic scan (extract or consolidate where reasonable)
+- abstraction opportunities reviewed (avoid premature over-abstraction)
+- dead code and stale files removed
+- docs/styleguide references updated to match new behavior
+
+## Communication requirement
+
+- briefly report what was checked and what was changed
+- if skipped for scope/time, state that explicitly and suggest a follow-up pass

@@ -1,0 +1,30 @@
+---
+description: Pause and ask user before high-impact scope or behavior changes
+alwaysApply: true
+---
+
+# Decision Escalation Checkpoints
+
+Use this rule to avoid silent scope drift during autonomous implementation.
+
+## Must pause and ask before proceeding when:
+
+- feature scope changes (new/removed requirements)
+- user-visible UX/flow changes from prior intent
+- database schema or migration strategy changes
+- auth/security behavior changes (token/session/permissions)
+- deployment/runtime strategy changes
+- significant timeline/risk increase is discovered
+
+## Response style
+
+- State what changed.
+- Provide 1-3 options.
+- Recommend one option with a short reason.
+- Wait for confirmation before implementing high-impact choice.
+
+## Continue without interruption when:
+
+- refactors are internal only
+- naming/organization changes do not alter behavior
+- low-risk implementation details change while preserving agreed outcomes

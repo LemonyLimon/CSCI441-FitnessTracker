@@ -1,0 +1,30 @@
+---
+description: Keep API contracts stable and synchronized across client/server
+alwaysApply: true
+---
+
+# API Contract Discipline (Mini)
+
+Apply when changing request/response behavior, status codes, or route semantics.
+
+## Required updates when API behavior changes
+
+- backend route/controller/service implementation
+- shared contract types in `shared/` when wire shape changes
+- client call sites in `client/src` that consume changed endpoints
+- tests for affected routes and client behavior
+- docs updates in `docs/api-overview.md` (and related docs if needed)
+
+## Contract consistency rules
+
+- keep envelope semantics consistent:
+  - success: `data` (+ `meta`)
+  - error: `error` (+ `meta`)
+- keep status codes intentional and stable
+- avoid breaking response shape silently
+
+## Ownership and auth
+
+- protected routes must use auth middleware
+- never trust client-provided `userId` for ownership decisions
+- service queries must enforce owner filters for user-owned data

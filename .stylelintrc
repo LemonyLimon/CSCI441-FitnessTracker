@@ -1,0 +1,6 @@
+{
+  "extends": "./node_modules/@learningfuze/lfz-config/config/stylelintrc.json",
+  "rules": {
+    "import-notation": "string"
+  }
+}

@@ -1,0 +1,133 @@
+/**
+ * Theme tokens: surfaces, text, interactives (WCAG 2.1 AAA targets).
+ * Field validation colors vary by theme (magenta, safety orange, etc.).
+ */
+
+:root,
+html[data-app-theme='standard'] {
+  --app-bg: #f8fafc;
+  --app-fg: #0f172a;
+  --app-fg-muted: #334155;
+  --app-border: #64748b;
+  --app-surface: #ffffff;
+  --app-accent: #1d4ed8;
+  --app-accent-fg: #ffffff;
+  --app-secondary-bg: #475569;
+  --app-secondary-fg: #ffffff;
+  --app-interactive-border: #475569;
+  --app-input-bg: #ffffff;
+  --app-input-border: #64748b;
+  --app-input-fg: #0f172a;
+  --app-focus-ring: #2563eb;
+  --app-field-error: #b91c1c;
+  --app-field-error-bg: #fef2f2;
+  --app-success-border: #047857;
+  --app-success-bg: #ecfdf5;
+  --app-success-fg: #064e3b;
+}
+
+html[data-app-theme='hc_black'] {
+  --app-bg: #000000;
+  --app-fg: #f5f5f5;
+  --app-fg-muted: #e5e5e5;
+  --app-border: #f5f5f5;
+  --app-surface: #0a0a0a;
+  --app-accent: #f5f5f5;
+  --app-accent-fg: #000000;
+  --app-secondary-bg: #262626;
+  --app-secondary-fg: #f5f5f5;
+  --app-interactive-border: #f5f5f5;
+  --app-input-bg: #000000;
+  --app-input-border: #f5f5f5;
+  --app-input-fg: #f5f5f5;
+  --app-focus-ring: #00ffff;
+  --app-field-error: #ff00ff;
+  --app-field-error-bg: #1a001a;
+  --app-success-border: #86efac;
+  --app-success-bg: #052e16;
+  --app-success-fg: #ecfdf5;
+}
+
+html[data-app-theme='hc_charcoal'] {
+  --app-bg: #121212;
+  --app-fg: #a0a6b0;
+  --app-fg-muted: #7a808a;
+  --app-border: #4682b4;
+  --app-surface: #1e1e1e;
+  --app-accent: #4682b4;
+  --app-accent-fg: #ffffff;
+  --app-secondary-bg: #2a2a2a;
+  --app-secondary-fg: #a0a6b0;
+  --app-interactive-border: #4682b4;
+  --app-input-bg: #121212;
+  --app-input-border: #4682b4;
+  --app-input-fg: #a0a6b0;
+  --app-focus-ring: #5a9fd4;
+  --app-field-error: #ff8c00;
+  --app-field-error-bg: #2a1a0a;
+  --app-success-border: #86efac;
+  --app-success-bg: #052e16;
+  --app-success-fg: #ecfdf5;
+}
+
+html[data-app-theme='hc_blue'] {
+  --app-bg: #003366;
+  --app-fg: #ffffff;
+  --app-fg-muted: #e0f2fe;
+  --app-border: #87ceeb;
+  --app-surface: #004080;
+  --app-accent: #87ceeb;
+  --app-accent-fg: #003366;
+  --app-secondary-bg: #1e4d7b;
+  --app-secondary-fg: #ffffff;
+  --app-interactive-border: #87ceeb;
+  --app-input-bg: #00264d;
+  --app-input-border: #87ceeb;
+  --app-input-fg: #ffffff;
+  --app-focus-ring: #ffff00;
+  --app-field-error: #ff00ff;
+  --app-field-error-bg: #330033;
+  --app-success-border: #86efac;
+  --app-success-bg: #052e16;
+  --app-success-fg: #ecfdf5;
+}
+
+html[data-app-theme='hc_yellow'] {
+  --app-bg: #ffff00;
+  --app-fg: #000000;
+  --app-fg-muted: #333333;
+  --app-border: #333333;
+  --app-surface: #fffde7;
+  --app-accent: #333333;
+  --app-accent-fg: #ffff00;
+  --app-secondary-bg: #333333;
+  --app-secondary-fg: #ffff00;
+  --app-interactive-border: #000000;
+  --app-input-bg: #ffffff;
+  --app-input-border: #000000;
+  --app-input-fg: #000000;
+  --app-focus-ring: #0000ff;
+  --app-field-error: #ff00ff;
+  --app-field-error-bg: #fff0ff;
+  --app-success-border: #166534;
+  --app-success-bg: #dcfce7;
+  --app-success-fg: #14532d;
+}
+
+/* Alternate error hue on HC themes via class on the error node */
+html[data-app-theme='hc_black'] .app-field-error--alt,
+html[data-app-theme='hc_blue'] .app-field-error--alt,
+html[data-app-theme='hc_yellow'] .app-field-error--alt {
+  color: #ffa500;
+}
+
+/* HC Yellow: selected segmented control — thick black border for visibility */
+html[data-app-theme='hc_yellow']
+  fieldset.preferences-segment-group
+  label:has(input[type='radio']:checked) {
+  border-width: 4px !important;
+  border-style: solid !important;
+  border-color: #000000 !important;
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+}

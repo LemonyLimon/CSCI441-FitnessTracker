@@ -1,0 +1,27 @@
+---
+description: Trigger consistency and abstraction checks after major feature updates
+alwaysApply: true
+---
+
+# Post-Feature Refactor Trigger (Mini)
+
+After a major feature or multi-file change, run a short consistency pass before closing work.
+
+## Trigger conditions
+
+- multiple endpoints or data flows changed
+- UI + API + DB touched in one feature
+- large PR or broad refactor
+
+## Required consistency checklist
+
+- Naming/style consistency with existing project patterns
+- Duplicate logic scan (extract or consolidate where reasonable)
+- Abstraction opportunities reviewed (avoid premature over-abstraction)
+- Dead code and stale files removed
+- Docs/styleguide references updated to match new behavior
+
+## Communication requirement
+
+- Briefly report what was checked and what was changed.
+- If skipped for scope/time, state that explicitly and suggest a follow-up pass.

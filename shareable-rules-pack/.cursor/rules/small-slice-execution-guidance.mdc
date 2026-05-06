@@ -1,0 +1,35 @@
+---
+description: Encourage one-slice-at-a-time delivery with optional user-approved continuation
+alwaysApply: true
+---
+
+# Small Slice Execution Guidance
+
+Use this rule for implementation work to reduce regression risk and keep progress verifiable.
+
+## Default behavior
+
+- Prefer one vertical slice at a time:
+  - backend/API change
+  - frontend integration (if needed)
+  - tests
+  - docs/changelog/release notes
+- After finishing one slice, prompt the user to validate and decide whether to continue.
+
+## User alert requirement
+
+Before starting a second major slice in the same pass, explicitly notify the user:
+
+- first slice is complete
+- what was validated
+- recommendation to stop and verify now
+
+## Flexibility
+
+- If user wants to continue immediately, proceed.
+- Do not block progress when the user explicitly asks to keep going.
+- Keep reminding briefly that smaller validated slices catch bugs earlier.
+
+## Suggested checkpoint language
+
+- "Slice 1 is complete and validated. Recommended: stop here and verify behavior before slice 2. If you want, I can continue now."

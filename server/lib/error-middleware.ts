@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import * as openid from 'openid-client';
 import { ZodError } from 'zod';
 import { env } from '@server/config/env.js';
+import { formatOpenIdClientFailure } from '@server/services/oidc-service.js';
 import { type ApiErrorCode } from '@shared/api-contracts';
 import { ClientError } from './client-error.js';
 import { sendError } from './http-response.js';
@@ -32,6 +34,12 @@ export function errorMiddleware(
     sendError(res, 401, {
       code: toErrorCode('invalid_token'),
       message: 'invalid access token',
+    });
+  } else if (err instanceof openid.ClientError) {
+    logger.error({ err, code: err.code }, 'openid-client error');
+    sendError(res, 503, {
+      code: toErrorCode('client_error'),
+      message: formatOpenIdClientFailure(err),
     });
   } else {
     logger.error({ err }, 'Unhandled server error');

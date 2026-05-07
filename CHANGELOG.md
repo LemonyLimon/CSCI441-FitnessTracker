@@ -10,6 +10,7 @@ The format is inspired by Keep a Changelog and uses semantic-style version secti
 
 - **Auth0 OIDC (Path A):** server routes `GET /api/auth/options`, `GET /api/auth/oidc/login`, `GET /api/auth/oidc/callback`, `POST /api/auth/logout`; PKCE + `openid-client`; signed cookies `ftrack_session` / `ftrack_oidc_login`; Bearer-from-header then cookie auth; optional `#oidc_token=` redirect for split Vercel + Render; demo email/password and guest gated by `AUTH_DEMO_ENABLED`. Client: fragment bootstrap, auth options-driven UI, MSW updates. Docs: [`docs/deployment/auth0-setup.md`](docs/deployment/auth0-setup.md), proposal [`docs/proposals/auth0-oidc-path-a-build-proposal.md`](docs/proposals/auth0-oidc-path-a-build-proposal.md).
 - **OIDC auth tests:** Supertest coverage for OIDC routes when disabled (404), `POST /api/auth/logout`, demo gate (`AUTH_DEMO_ENABLED=false` via env mock), and `authMiddleware` Bearer vs session cookie behavior ([`server/routes/api.test.ts`](server/routes/api.test.ts), [`server/routes/auth-demo-gate.test.ts`](server/routes/auth-demo-gate.test.ts), [`server/lib/authorization-middleware.test.ts`](server/lib/authorization-middleware.test.ts)).
+- **Docs + client OIDC test:** [`docs/api-overview.md`](docs/api-overview.md) and [`README.md`](README.md) describe OIDC/auth options/logout; [`client/src/App.oidc-login.test.tsx`](client/src/App.oidc-login.test.tsx) covers Auth0 button clearing stored JWT before redirect.
 
 ### Changed
 

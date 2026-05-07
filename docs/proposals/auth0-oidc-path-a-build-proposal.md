@@ -87,6 +87,12 @@ Fills gaps from Slice 1’s test list without requiring live Auth0:
 3. **`authorization-middleware.test.ts`:** valid **Bearer** JWT; invalid Bearer **falls through** to **`ftrack_session`** cookie; unauthenticated throws **`ClientError`**.
 4. Gate: root **`pnpm run lint`**, **`tsc`**, **`test`**, **`build`**.
 
+### Slice 5 — API docs + Slice 2 client test completion
+
+1. **`docs/api-overview.md`** / **`README.md`**: document **`GET /api/auth/options`**, OIDC routes, **`POST /api/auth/logout`**, Bearer **or** **`ftrack_session`** cookie, and `?auth_error=` behavior at a high level.
+2. **Client:** `App.oidc-login.test.tsx` — **`Continue with Auth0`** clears **`wtmini.token`** and assigns **`location.href`** to **`/api/auth/oidc/login`** (hold **`/api/me`** hydration during the test so the sign-in panel stays mounted with a stale token).
+3. Gate: same quality commands.
+
 ## Secrets and logging (hard rules)
 
 - Never log: authorization `code`, OAuth `state`, `id_token`, `access_token`, issued JWT, `Authorization` header, raw `Cookie` header.
@@ -103,6 +109,7 @@ Fills gaps from Slice 1’s test list without requiring live Auth0:
 - **Fragment unit tests:** `client/src/lib/oidc-fragment.test.ts` covers bootstrap + hash stripping.
 - **Drizzle Kit:** `server/drizzle.config.ts` aligns SSL handling with `server/db/pool.ts` so `drizzle-kit migrate` can reach Neon consistently.
 - **OIDC service / full callback:** exercising **`openid-client`** discovery and token exchange still requires integration tests with a mock IdP or manual smoke; Slice 4 stops at HTTP-visible behavior + middleware + demo gate.
+- **Slice 5:** closes the documentation gap and the Slice 2 checklist item for an OIDC button test; hosted smoke (Slice 3 §6) remains manual.
 
 ## Reference
 

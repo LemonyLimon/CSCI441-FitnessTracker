@@ -25,6 +25,7 @@ The format is inspired by Keep a Changelog and uses semantic-style version secti
 
 ### Fixed
 
+- **OIDC login:** IdP **discovery** failures no longer leave a stuck rejected promise (every retry could fail until restart); **`GET /api/auth/oidc/login`** now returns **503** with a **`client_error`** hint instead of a generic **500** `internal_error` when discovery or the authorize URL build fails ([`server/services/oidc-service.ts`](server/services/oidc-service.ts)).
 - Workout create form: `step="any"` on weight (and edit) number inputs so decimal weights are not blocked by browser default `step="1"` validation before `onSubmit` runs; clearer errors for missing title or session ([`client/src/App.tsx`](client/src/App.tsx)).
 - Client API errors: show the first Zod validation path/message when the server returns `validation_error` details ([`client/src/lib/api-error.ts`](client/src/lib/api-error.ts)).
 - Expanded [`docs/troubleshooting.md`](docs/troubleshooting.md) with database connectivity checks and guidance when `db:migrate` fails silently after schema drift.

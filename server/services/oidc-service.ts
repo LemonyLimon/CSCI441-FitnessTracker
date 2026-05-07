@@ -45,12 +45,12 @@ export async function getOidcConfiguration(): Promise<oidc.Configuration> {
     const metadata = hasSecret
       ? { token_endpoint_auth_method: 'client_secret_post' as const }
       : { token_endpoint_auth_method: 'none' as const };
-    oidcConfigPromise = oidc.discovery(
-      issuer,
-      env.AUTH_OIDC_CLIENT_ID,
-      metadata,
-      clientAuth,
-    );
+    oidcConfigPromise = oidc
+      .discovery(issuer, env.AUTH_OIDC_CLIENT_ID, metadata, clientAuth)
+      .catch((err: unknown) => {
+        oidcConfigPromise = null;
+        throw err;
+      });
   }
   return oidcConfigPromise;
 }
@@ -60,18 +60,30 @@ export async function buildOidcAuthorizationRedirect(
   nonce: string,
   codeVerifier: string,
 ): Promise<string> {
-  const config = await getOidcConfiguration();
-  const codeChallenge = await oidc.calculatePKCECodeChallenge(codeVerifier);
-  const redirectTo = oidc.buildAuthorizationUrl(config, {
-    redirect_uri: env.AUTH_OIDC_REDIRECT_URI,
-    scope: 'openid profile email',
-    state,
-    nonce,
-    code_challenge: codeChallenge,
-    code_challenge_method: 'S256',
-    prompt: 'select_account',
-  });
-  return redirectTo.toString();
+  try {
+    const config = await getOidcConfiguration();
+    const codeChallenge = await oidc.calculatePKCECodeChallenge(codeVerifier);
+    const redirectTo = oidc.buildAuthorizationUrl(config, {
+      redirect_uri: env.AUTH_OIDC_REDIRECT_URI,
+      scope: 'openid profile email',
+      state,
+      nonce,
+      code_challenge: codeChallenge,
+      code_challenge_method: 'S256',
+      prompt: 'select_account',
+    });
+    return redirectTo.toString();
+  } catch (err) {
+    if (err instanceof ClientError) throw err;
+    logger.error(
+      { err },
+      'OIDC: authorization redirect failed (discovery, PKCE, or authorize URL)',
+    );
+    throw new ClientError(
+      503,
+      'Could not start sign-in with the identity provider. Verify AUTH_OIDC_ISSUER matches your Auth0 tenant (open Authentication → Your app → Settings → Domain) and that AUTH_OIDC_CLIENT_ID / AUTH_OIDC_CLIENT_SECRET match the same application.',
+    );
+  }
 }
 
 /** Build callback URL for token exchange; must match AUTH_OIDC_REDIRECT_URI origin/path. */

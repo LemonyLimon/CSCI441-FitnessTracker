@@ -65,5 +65,6 @@ Heavy polling or bursts against **`/api/auth/*`** can trip **`RATE_LIMIT_*`** on
 
 ## Local troubleshooting
 
+- **`500` / `internal_error` JSON when opening `GET /api/auth/oidc/login`:** the API failed while loading Auth0’s OIDC metadata (before redirect). Check **Render logs** for the underlying error. Typical fixes: **`AUTH_OIDC_ISSUER`** must be the Auth0 issuer URL (often `https://YOUR_TENANT.us.auth0.com/` — include the correct **regional** domain Auth0 shows), **`AUTH_OIDC_CLIENT_ID`** must match the same Auth0 application, and set **`AUTH_OIDC_CLIENT_SECRET`** if the app is not public. From any machine, open **`https://<issuer-host>/.well-known/openid-configuration`** — it must return JSON, not 404.
 - **`401`** after OIDC: confirm token in **`localStorage`** (`wtmini.token`), **`credentials: 'include'`** on API calls, and **`CORS_ORIGIN`** includes `http://localhost:5173`.
 - **State / cookie issues:** ensure callback URL origin matches where the browser stored the OIDC state cookie (same-origin policy); use the **`localhost:5173`** callback pattern above for local dev.

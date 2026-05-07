@@ -92,4 +92,36 @@ describe('api routes', () => {
       }),
     );
   });
+
+  it('returns auth options from GET /api/auth/options with no-store', async () => {
+    const res = await request(app).get('/api/auth/options').expect(200);
+    expect(res.headers['cache-control']).toMatch(/no-store/);
+    expect(res.body.data).toEqual({
+      oidc: false,
+      demo: true,
+    });
+  });
+
+  it('returns 404 from GET /api/auth/oidc/login when OIDC is disabled', async () => {
+    const res = await request(app).get('/api/auth/oidc/login').expect(404);
+    expect(res.body.error).toEqual(
+      expect.objectContaining({
+        message: 'OpenID Connect login is not enabled',
+      }),
+    );
+  });
+
+  it('returns 404 from GET /api/auth/oidc/callback when OIDC is disabled', async () => {
+    const res = await request(app).get('/api/auth/oidc/callback').expect(404);
+    expect(res.body.error).toEqual(
+      expect.objectContaining({
+        message: 'OpenID Connect login is not enabled',
+      }),
+    );
+  });
+
+  it('returns ok from POST /api/auth/logout', async () => {
+    const res = await request(app).post('/api/auth/logout').expect(200);
+    expect(res.body.data).toEqual({ ok: true });
+  });
 });

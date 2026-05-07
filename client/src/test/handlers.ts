@@ -145,6 +145,15 @@ export function resetApiMockState() {
 }
 
 export const handlers = [
+  http.get('/api/auth/options', () => {
+    return HttpResponse.json({
+      data: { oidc: false, demo: true },
+      meta: {},
+    });
+  }),
+  http.post('/api/auth/logout', () => {
+    return HttpResponse.json({ data: { ok: true }, meta: {} });
+  }),
   http.post('/api/auth/guest', () => {
     currentToken = 'guest-token';
     currentUser = {

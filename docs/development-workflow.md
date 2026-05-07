@@ -2,6 +2,17 @@
 
 This guide describes the daily loop for developing this app (same workflow as **workout-tracker-mini**).
 
+## Git identity (GitHub)
+
+Point Git at the **same name and email** you use on GitHub (the email must be **verified** in GitHub Settings → Emails) so pushes attribute commits to your profile:
+
+```sh
+git config --global user.name "Your Full Name"
+git config --global user.email "your-verified-email@example.com"
+```
+
+Use `git config user.email` without `--global` in a single repo if you prefer a repo-specific override. Update these values whenever you rotate or change your GitHub commit address.
+
 ## Local Development Loop
 
 1. Pull latest changes.

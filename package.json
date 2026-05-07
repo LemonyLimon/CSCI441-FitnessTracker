@@ -42,7 +42,8 @@
     "tsc:server": "pnpm -C server exec tsc --project .",
     "tsc": "npm-run-all --continue-on-error tsc:*",
     "prepare": "husky",
-    "deploy": "git push origin main:pub"
+    "deploy": "git push origin main:pub",
+    "smoke:deploy": "node scripts/smoke-deploy.mjs"
   },
   "devDependencies": {
     "@learningfuze/lfz-config": "^1.0.0",

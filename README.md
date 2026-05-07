@@ -2,7 +2,7 @@
 
 Course project repository. The **stack, scripts, and features** match [`workout-tracker-mini`](https://github.com/) (see [`docs/migration-from-mini.md`](docs/migration-from-mini.md) for the source snapshot and verification checklist).
 
-**What you get:** JWT login (`Continue as guest` and email/password), workout CRUD, exercise catalog (seeded + custom), accessibility preferences (high-contrast **themes**, scaled **text size**, and `PATCH /api/me/preferences`), and the same deployment model as the reference mini app. See [`docs/accessibility-ui.md`](docs/accessibility-ui.md) for UI behavior and [`docs/plans/frontend-accessibility-updates-proposal.md`](docs/plans/frontend-accessibility-updates-proposal.md) for a structured PR review proposal.
+**What you get:** JWT login (`Continue as guest` and email/password), optional **Auth0 OIDC** (`Continue with Auth0`) when enabled on the API, workout CRUD, exercise catalog (seeded + custom), accessibility preferences (high-contrast **themes**, scaled **text size**, and `PATCH /api/me/preferences`), and the same deployment model as the reference mini app. OIDC env and Auth0 dashboard setup: [`docs/deployment/auth0-setup.md`](docs/deployment/auth0-setup.md). See [`docs/accessibility-ui.md`](docs/accessibility-ui.md) for UI behavior and [`docs/plans/frontend-accessibility-updates-proposal.md`](docs/plans/frontend-accessibility-updates-proposal.md) for a structured PR review proposal.
 
 ## First 30 Minutes (Quickstart)
 
@@ -54,6 +54,8 @@ pnpm run dev
 
 If any step fails, start with [`docs/troubleshooting.md`](docs/troubleshooting.md).
 
+After you deploy the API (e.g. Render), you can run `DEPLOY_URL=https://<your-api-host> pnpm run smoke:deploy` from the repo root for automated health/auth checks—see [`docs/deployment/auth0-setup.md`](docs/deployment/auth0-setup.md).
+
 ## Demo Account
 
 `pnpm run db:seed` creates this account if it does not exist:
@@ -63,12 +65,15 @@ If any step fails, start with [`docs/troubleshooting.md`](docs/troubleshooting.m
 
 ## API at a Glance
 
-Public routes:
+Public routes (see [`docs/api-overview.md`](docs/api-overview.md) for OIDC paths):
 
+- `GET /api/auth/options`
 - `POST /api/auth/guest`
 - `POST /api/auth/sign-in`
+- `POST /api/auth/logout`
+- OIDC: `GET /api/auth/oidc/login`, `GET /api/auth/oidc/callback` (when enabled)
 
-Protected routes (`Authorization: Bearer <token>`):
+Protected routes (Bearer JWT and/or OIDC session cookie per server):
 
 - `GET /api/me`
 - `PATCH /api/me/preferences`

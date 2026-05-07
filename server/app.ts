@@ -21,6 +21,9 @@ function parseCorsOrigins(): string[] {
  */
 export function createApp(): express.Express {
   const app = express();
+  if (env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1);
+  }
   const allowedOrigins = parseCorsOrigins();
   const apiReadRateLimiter = rateLimit({
     windowMs: env.RATE_LIMIT_WINDOW_MS,

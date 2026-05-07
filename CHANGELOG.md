@@ -16,6 +16,7 @@ The format is inspired by Keep a Changelog and uses semantic-style version secti
 
 ### Changed
 
+- **`docs/development-workflow.md`**: document Git **`user.name` / `user.email`** setup so commits match GitHub’s verified commit email.
 - **Breaking (API):** goal resources returned from `/api/me/goals` use field **`goalId`** instead of `id`. Exercise catalog routes live under **`/api/exercise-types`** (replacing the old `/api/exercises` catalog paths).
 - **Database:** migration **`0006_exercise_goal_pk_names`** renames primary key columns to **`exerciseId`** (`exercises`) and **`goalId`** (`goals`) when legacy columns named **`id`** still exist (idempotent if `schema.sql` already used the new names). Existing databases at migration **0005** must run **`pnpm run db:migrate`** once to apply **0006**; [`database/drizzle-baseline-after-import.sql`](database/drizzle-baseline-after-import.sql) includes the matching migration hash for imports.
 - **Tooling:** root **`pnpm run db:migrate`** runs [`scripts/db-migrate.mjs`](scripts/db-migrate.mjs) so failed runs print troubleshooting hints (Drizzle itself may show little output when `pnpm` wraps the process).

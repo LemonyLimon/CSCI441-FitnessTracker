@@ -56,6 +56,8 @@ After deploy:
 4. Create custom exercise + workout.
 5. Confirm workout list loads on refresh.
 
+Optional quick API checks from your machine (no secrets): `DEPLOY_URL=https://<render-api> pnpm run smoke:deploy` from the repo root. See [`deployment/auth0-setup.md`](deployment/auth0-setup.md) § _Post-deploy API smoke_.
+
 ## Troubleshooting Deployment
 
 - `401/403` from browser: confirm `CORS_ORIGIN` matches Vercel URL exactly.

@@ -54,6 +54,8 @@ pnpm run dev
 
 If any step fails, start with [`docs/troubleshooting.md`](docs/troubleshooting.md).
 
+After you deploy the API (e.g. Render), you can run `DEPLOY_URL=https://<your-api-host> pnpm run smoke:deploy` from the repo root for automated health/auth checks—see [`docs/deployment/auth0-setup.md`](docs/deployment/auth0-setup.md).
+
 ## Demo Account
 
 `pnpm run db:seed` creates this account if it does not exist:

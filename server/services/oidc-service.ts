@@ -9,6 +9,14 @@ import { isPgUniqueViolation } from '@server/lib/pg-errors.js';
 
 let oidcConfigPromise: Promise<oidc.Configuration> | null = null;
 
+/** Clears cached IdP discovery (Vitest only). */
+export function resetOidcConfigurationCacheForTests(): void {
+  if (process.env.NODE_ENV !== 'test') {
+    throw new Error('resetOidcConfigurationCacheForTests is test-only');
+  }
+  oidcConfigPromise = null;
+}
+
 function requireDb(): DbClient {
   const db = getDrizzleDb();
   if (!db) {

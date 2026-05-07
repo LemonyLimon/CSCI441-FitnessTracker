@@ -47,6 +47,8 @@ Do not commit the connection string; set it only in Render.
 
 After deploy, confirm: `https://<your-service>.onrender.com/api/health` returns **200**.
 
+Optional automated checks (health, auth options, unauthenticated 401s): from the repo root run `DEPLOY_URL=https://<your-service>.onrender.com pnpm run smoke:deploy` (see [`auth0-setup.md`](auth0-setup.md) § _Post-deploy API smoke_).
+
 ## 3) Vercel (frontend)
 
 1. **New project** → import the same Git repository.

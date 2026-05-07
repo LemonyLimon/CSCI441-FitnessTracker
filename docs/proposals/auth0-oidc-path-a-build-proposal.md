@@ -93,6 +93,13 @@ Fills gaps from Slice 1’s test list without requiring live Auth0:
 2. **Client:** `App.oidc-login.test.tsx` — **`Continue with Auth0`** clears **`wtmini.token`** and assigns **`location.href`** to **`/api/auth/oidc/login`** (hold **`/api/me`** hydration during the test so the sign-in panel stays mounted with a stale token).
 3. Gate: same quality commands.
 
+### Slice 6 — Deploy smoke script + mock-OIDC integration tests
+
+1. **`scripts/smoke-deploy.mjs`** + **`pnpm run smoke:deploy`**: requires **`DEPLOY_URL`** = hosted **API** base URL (e.g. Render). Validates health, **`GET /api/auth/options`** no-store + `{ oidc, demo }`, and **401** without auth on sample protected routes.
+2. **Tests:** **`server/services/oidc-service.test.ts`** — **`buildOidcCallbackUrl`**, **`exchangeOidcAuthorizationCode`** with **`openid-client`** mocked; **`resetOidcConfigurationCacheForTests`** for Vitest.
+3. **`server/routes/oidc-flow.integration.test.ts`** — deterministic **`openid-client`** random helpers + mocked **`buildOidcAuthorizationRedirect`**, **`exchangeOidcAuthorizationCode`**, **`upsertUserFromOidcProfile`**; Supertest **login → callback** redirect with session cookie.
+4. Gate: root **`pnpm run lint`**, **`tsc`**, **`test`**, **`build`**.
+
 ## Secrets and logging (hard rules)
 
 - Never log: authorization `code`, OAuth `state`, `id_token`, `access_token`, issued JWT, `Authorization` header, raw `Cookie` header.
@@ -110,6 +117,7 @@ Fills gaps from Slice 1’s test list without requiring live Auth0:
 - **Drizzle Kit:** `server/drizzle.config.ts` aligns SSL handling with `server/db/pool.ts` so `drizzle-kit migrate` can reach Neon consistently.
 - **OIDC service / full callback:** exercising **`openid-client`** discovery and token exchange still requires integration tests with a mock IdP or manual smoke; Slice 4 stops at HTTP-visible behavior + middleware + demo gate.
 - **Slice 5:** closes the documentation gap and the Slice 2 checklist item for an OIDC button test; hosted smoke (Slice 3 §6) remains manual.
+- **Slice 6:** scripted **`smoke:deploy`** automates part of Slice 3 §6 against **`DEPLOY_URL`**; full Auth0 browser login remains manual.
 
 ## Reference
 

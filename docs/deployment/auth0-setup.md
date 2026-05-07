@@ -4,6 +4,16 @@ This app supports **Auth0** as an OpenID Connect provider using the same pattern
 
 For the implementation playbook (build slices, invariants, rollback), see [`../proposals/auth0-oidc-path-a-build-proposal.md`](../proposals/auth0-oidc-path-a-build-proposal.md).
 
+## Post-deploy API smoke (optional)
+
+After the Render service is live, you can run the repo smoke script against the **API origin** (same host as `/api/*`), **not** the Vercel SPA URL:
+
+```bash
+DEPLOY_URL=https://<your-render-service>.onrender.com pnpm run smoke:deploy
+```
+
+This checks `GET /api/health`, `GET /api/auth/options` (must send **`Cache-Control: no-store`**), and unauthenticated **401** responses on `GET /api/workouts` and `GET /api/me`. **No credentials or secrets** are required—only the public base URL.
+
 ## Auth0 application settings
 
 1. **Application type:** Regular Web Application (or equivalent that supports authorization code + PKCE).

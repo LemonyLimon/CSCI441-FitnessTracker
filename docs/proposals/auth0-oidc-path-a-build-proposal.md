@@ -78,6 +78,15 @@ Browser abbreviations: the IdP redirects the **browser**; the callback URL is al
 5. **`CHANGELOG.md`**: `[Unreleased]` entry.
 6. Smoke: Auth0 tenant + Render + Vercel end-to-end.
 
+### Slice 4 — Tests & regression (post-merge follow-up)
+
+Fills gaps from Slice 1’s test list without requiring live Auth0:
+
+1. **Route integration (`api.test.ts`):** OIDC login/callback **404** when `AUTH_OIDC_ENABLED=false`; **`POST /api/auth/logout`** success envelope.
+2. **Demo gate (`auth-demo-gate.test.ts`):** `vi.mock('@server/config/env.js')` with **`AUTH_DEMO_ENABLED=false`** — `POST /api/auth/guest` and **`POST /api/auth/sign-in`** return **403**; **`GET /api/auth/options`** reflects **`demo: false`**.
+3. **`authorization-middleware.test.ts`:** valid **Bearer** JWT; invalid Bearer **falls through** to **`ftrack_session`** cookie; unauthenticated throws **`ClientError`**.
+4. Gate: root **`pnpm run lint`**, **`tsc`**, **`test`**, **`build`**.
+
 ## Secrets and logging (hard rules)
 
 - Never log: authorization `code`, OAuth `state`, `id_token`, `access_token`, issued JWT, `Authorization` header, raw `Cookie` header.
@@ -93,6 +102,7 @@ Browser abbreviations: the IdP redirects the **browser**; the callback URL is al
 - **Vitest (client):** tests run with **`happy-dom`** instead of **jsdom** (`client/vite.config.ts`) to avoid ESM/worker startup issues in this environment; behavior under CI should match.
 - **Fragment unit tests:** `client/src/lib/oidc-fragment.test.ts` covers bootstrap + hash stripping.
 - **Drizzle Kit:** `server/drizzle.config.ts` aligns SSL handling with `server/db/pool.ts` so `drizzle-kit migrate` can reach Neon consistently.
+- **OIDC service / full callback:** exercising **`openid-client`** discovery and token exchange still requires integration tests with a mock IdP or manual smoke; Slice 4 stops at HTTP-visible behavior + middleware + demo gate.
 
 ## Reference
 

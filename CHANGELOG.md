@@ -12,6 +12,7 @@ The format is inspired by Keep a Changelog and uses semantic-style version secti
 - **OIDC auth tests:** Supertest coverage for OIDC routes when disabled (404), `POST /api/auth/logout`, demo gate (`AUTH_DEMO_ENABLED=false` via env mock), and `authMiddleware` Bearer vs session cookie behavior ([`server/routes/api.test.ts`](server/routes/api.test.ts), [`server/routes/auth-demo-gate.test.ts`](server/routes/auth-demo-gate.test.ts), [`server/lib/authorization-middleware.test.ts`](server/lib/authorization-middleware.test.ts)).
 - **Docs + client OIDC test:** [`docs/api-overview.md`](docs/api-overview.md) and [`README.md`](README.md) describe OIDC/auth options/logout; [`client/src/App.oidc-login.test.tsx`](client/src/App.oidc-login.test.tsx) covers Auth0 button clearing stored JWT before redirect.
 - **Deploy smoke + OIDC integration tests:** [`scripts/smoke-deploy.mjs`](scripts/smoke-deploy.mjs) (`pnpm run smoke:deploy` with **`DEPLOY_URL`**) checks hosted API health/auth options/401 behavior; [`server/services/oidc-service.test.ts`](server/services/oidc-service.test.ts) and [`server/routes/oidc-flow.integration.test.ts`](server/routes/oidc-flow.integration.test.ts) exercise OIDC helpers and login→callback flow with mocked IdP (`openid-client` / service mocks). Documented in [`docs/deployment/auth0-setup.md`](docs/deployment/auth0-setup.md).
+- **Smoke script:** clearer failure when `/api/auth/options` returns **`text/html`** (SPA fallback) instead of JSON—usually an API deploy without the auth-options route yet.
 
 ### Changed
 

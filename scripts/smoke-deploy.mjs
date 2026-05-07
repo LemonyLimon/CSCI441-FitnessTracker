@@ -49,6 +49,14 @@ async function run() {
     headers: { Accept: 'application/json' },
   });
   ensureOk(optsRes, 'GET /api/auth/options');
+  const optsContentType = optsRes.headers.get('content-type') ?? '';
+  if (!/application\/json/i.test(optsContentType)) {
+    throw new Error(
+      `GET /api/auth/options returned "${optsContentType}" (expected application/json). ` +
+        `If you see text/html, the server is serving the SPA shell—deploy may be missing ` +
+        `GET /api/auth/options (merge OIDC changes and redeploy the API).`,
+    );
+  }
   const cacheControl = optsRes.headers.get('cache-control') ?? '';
   if (!/no-store/i.test(cacheControl)) {
     throw new Error(

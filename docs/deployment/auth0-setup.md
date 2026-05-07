@@ -65,5 +65,7 @@ Heavy polling or bursts against **`/api/auth/*`** can trip **`RATE_LIMIT_*`** on
 
 ## Local troubleshooting
 
+- **`500` / `internal_error` or logs with `OAUTH_RESPONSE_IS_NOT_CONFORM` / “unexpected HTTP response status code”:** `openid-client` could not load OIDC discovery from **`AUTH_OIDC_ISSUER`** (the GET to **`/.well-known/openid-configuration`** returned a bad status or non‑JSON body — often **404**). Fix **`AUTH_OIDC_ISSUER`** on Render to match **Auth0 Dashboard → Applications → your app → Settings → Domain** — typically **`https://dev-xxxx.us.auth0.com/`** or **`https://YOUR_TENANT.us.auth0.com/`** (use the exact **regional** hostname Auth0 shows; `YOUR_APP.auth0.com` without the **`dev-…`** / **`us.`** segment is a frequent typo). In a browser or with curl, **`https://<that-domain>/.well-known/openid-configuration`** must return **JSON**, not HTML or 404. Align **`AUTH_OIDC_CLIENT_ID`** (and **secret** if the app is confidential) with that same application.
+- **`503` / `client_error` with a long discovery hint:** same fix as above — deploy the latest API so misconfigured issuers return this message instead of **`internal_error`**.
 - **`401`** after OIDC: confirm token in **`localStorage`** (`wtmini.token`), **`credentials: 'include'`** on API calls, and **`CORS_ORIGIN`** includes `http://localhost:5173`.
 - **State / cookie issues:** ensure callback URL origin matches where the browser stored the OIDC state cookie (same-origin policy); use the **`localhost:5173`** callback pattern above for local dev.

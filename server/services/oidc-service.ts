@@ -17,6 +17,21 @@ export function resetOidcConfigurationCacheForTests(): void {
   oidcConfigPromise = null;
 }
 
+/** Map `openid-client` failures to an API-safe message (never log tokens). */
+export function formatOpenIdClientFailure(
+  err: InstanceType<typeof oidc.ClientError>,
+): string {
+  if (err.code === 'OAUTH_RESPONSE_IS_NOT_CONFORM') {
+    return (
+      'OIDC discovery failed: the issuer URL did not return a valid OpenID document. ' +
+      'Set AUTH_OIDC_ISSUER to your Auth0 Domain from Dashboard → Applications → [your app] → Settings ' +
+      '(for example https://dev-xxxx.us.auth0.com/ — use the exact regional domain Auth0 shows). ' +
+      'Confirm in a browser that https://<domain>/.well-known/openid-configuration returns JSON.'
+    );
+  }
+  return `Identity provider error: ${err.message}`;
+}
+
 function requireDb(): DbClient {
   const db = getDrizzleDb();
   if (!db) {
@@ -45,12 +60,12 @@ export async function getOidcConfiguration(): Promise<oidc.Configuration> {
     const metadata = hasSecret
       ? { token_endpoint_auth_method: 'client_secret_post' as const }
       : { token_endpoint_auth_method: 'none' as const };
-    oidcConfigPromise = oidc.discovery(
-      issuer,
-      env.AUTH_OIDC_CLIENT_ID,
-      metadata,
-      clientAuth,
-    );
+    oidcConfigPromise = oidc
+      .discovery(issuer, env.AUTH_OIDC_CLIENT_ID, metadata, clientAuth)
+      .catch((err: unknown) => {
+        oidcConfigPromise = null;
+        throw err;
+      });
   }
   return oidcConfigPromise;
 }
@@ -60,18 +75,37 @@ export async function buildOidcAuthorizationRedirect(
   nonce: string,
   codeVerifier: string,
 ): Promise<string> {
-  const config = await getOidcConfiguration();
-  const codeChallenge = await oidc.calculatePKCECodeChallenge(codeVerifier);
-  const redirectTo = oidc.buildAuthorizationUrl(config, {
-    redirect_uri: env.AUTH_OIDC_REDIRECT_URI,
-    scope: 'openid profile email',
-    state,
-    nonce,
-    code_challenge: codeChallenge,
-    code_challenge_method: 'S256',
-    prompt: 'select_account',
-  });
-  return redirectTo.toString();
+  try {
+    const config = await getOidcConfiguration();
+    const codeChallenge = await oidc.calculatePKCECodeChallenge(codeVerifier);
+    const redirectTo = oidc.buildAuthorizationUrl(config, {
+      redirect_uri: env.AUTH_OIDC_REDIRECT_URI,
+      scope: 'openid profile email',
+      state,
+      nonce,
+      code_challenge: codeChallenge,
+      code_challenge_method: 'S256',
+      prompt: 'select_account',
+    });
+    return redirectTo.toString();
+  } catch (err) {
+    if (err instanceof ClientError) throw err;
+    if (err instanceof oidc.ClientError) {
+      logger.error(
+        { err, code: err.code },
+        'OIDC: IdP discovery or authorize URL failed',
+      );
+      throw new ClientError(503, formatOpenIdClientFailure(err));
+    }
+    logger.error(
+      { err },
+      'OIDC: authorization redirect failed (discovery, PKCE, or authorize URL)',
+    );
+    throw new ClientError(
+      503,
+      'Could not start sign-in with the identity provider. Verify AUTH_OIDC_ISSUER matches your Auth0 tenant (Applications → your app → Settings → Domain) and that AUTH_OIDC_CLIENT_ID / AUTH_OIDC_CLIENT_SECRET match the same application.',
+    );
+  }
 }
 
 /** Build callback URL for token exchange; must match AUTH_OIDC_REDIRECT_URI origin/path. */

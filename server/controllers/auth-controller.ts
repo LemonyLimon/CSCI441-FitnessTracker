@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
-import { sendSuccess } from '@server/lib/http-response.js';
+import { env } from '@server/config/env.js';
+import { sendError, sendSuccess } from '@server/lib/http-response.js';
 import { requireUserId } from '@server/lib/request-user.js';
 import {
   createGuestSession,
@@ -35,6 +36,13 @@ export async function postAuthGuest(
   next: NextFunction,
 ): Promise<void> {
   try {
+    if (!env.AUTH_DEMO_ENABLED) {
+      sendError(res, 403, {
+        code: 'client_error',
+        message: 'demo authentication is disabled',
+      });
+      return;
+    }
     const result = await createGuestSession();
     sendSuccess(res, result, 201);
   } catch (err) {
@@ -49,6 +57,13 @@ export async function postAuthSignIn(
   next: NextFunction,
 ): Promise<void> {
   try {
+    if (!env.AUTH_DEMO_ENABLED) {
+      sendError(res, 403, {
+        code: 'client_error',
+        message: 'demo authentication is disabled',
+      });
+      return;
+    }
     const body = signInBody.parse(req.body);
     const result = await signInUser(body.email, body.password);
     sendSuccess(res, result);

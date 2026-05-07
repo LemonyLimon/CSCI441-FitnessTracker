@@ -1,21 +1,42 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { env } from '@server/config/env.js';
+import { readAppSessionCookie } from '@server/lib/session-cookies.js';
 import { ClientError } from './client-error.js';
 
 const secret = env.TOKEN_SECRET;
 
-/** Validate bearer token and attach decoded user to request context. */
+/**
+ * Accept Bearer JWT (demo / guest / OIDC fragment handoff) or signed OIDC session cookie.
+ */
 export function authMiddleware(
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ): void {
-  // The token will be in the Authorization header with the format `Bearer ${token}`
-  const token = req.get('authorization')?.split('Bearer ')[1];
-  if (!token) {
-    throw new ClientError(401, 'authentication required');
+  const authorization = req.get('authorization') ?? '';
+  const bearerMatch = authorization.match(/^Bearer\s+(.+)$/i);
+  const token = bearerMatch?.[1]?.trim();
+
+  if (token) {
+    try {
+      const payload = jwt.verify(token, secret) as { userId?: unknown };
+      if (typeof payload.userId === 'number') {
+        req.user = { userId: payload.userId };
+        next();
+        return;
+      }
+    } catch {
+      /* Expired/malformed JWT — still allow OIDC session cookie below. */
+    }
   }
-  req.user = jwt.verify(token, secret) as Request['user'];
-  next();
+
+  const session = readAppSessionCookie(req);
+  if (session && typeof session.userId === 'number') {
+    req.user = { userId: session.userId };
+    next();
+    return;
+  }
+
+  throw new ClientError(401, 'authentication required');
 }

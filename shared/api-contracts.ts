@@ -13,6 +13,12 @@ export type ApiSuccessEnvelope<T> = {
   meta?: ApiMeta;
 };
 
+/** GET /api/auth/options — which auth flows the SPA should expose. */
+export type AuthOptionsResponse = {
+  oidc: boolean;
+  demo: boolean;
+};
+
 export type ApiErrorBody = {
   code: ApiErrorCode;
   message: string;

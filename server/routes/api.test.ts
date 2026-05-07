@@ -92,4 +92,13 @@ describe('api routes', () => {
       }),
     );
   });
+
+  it('returns auth options from GET /api/auth/options with no-store', async () => {
+    const res = await request(app).get('/api/auth/options').expect(200);
+    expect(res.headers['cache-control']).toMatch(/no-store/);
+    expect(res.body.data).toEqual({
+      oidc: false,
+      demo: true,
+    });
+  });
 });

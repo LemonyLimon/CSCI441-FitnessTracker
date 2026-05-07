@@ -1,7 +1,12 @@
 @import 'tailwindcss';
 
 :root {
-  font-family: 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  font-family:
+    Lexend,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
     sans-serif;
   line-height: 1.6;
   font-synthesis: none;
@@ -14,7 +19,12 @@
 body {
   margin: 0;
   min-width: 320px;
-  font-family: 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  font-family:
+    Lexend,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
     sans-serif;
   letter-spacing: 0.02em;
   line-height: 1.6;
@@ -26,6 +36,25 @@ button,
 [type='reset'],
 [role='button'] {
   font-weight: 500;
+}
+
+/* Pointer on clickable buttons and links; disabled controls stay visibly non-interactive */
+a[href],
+button:not(:disabled),
+[type='button']:not(:disabled),
+[type='submit']:not(:disabled),
+[type='reset']:not(:disabled),
+[role='button']:not(:disabled, [aria-disabled='true']),
+[role='link'] {
+  cursor: pointer;
+}
+
+button:disabled,
+[type='button']:disabled,
+[type='submit']:disabled,
+[type='reset']:disabled,
+[role='button'][aria-disabled='true'] {
+  cursor: not-allowed;
 }
 
 h1,

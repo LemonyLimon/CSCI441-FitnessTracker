@@ -33,14 +33,17 @@ Do not commit the connection string; set it only in Render.
 
 ### Render environment variables
 
-| Key            | Notes                                                   |
-| -------------- | ------------------------------------------------------- |
-| `NODE_ENV`     | `production`                                            |
-| `DATABASE_URL` | Neon pooled connection string                           |
-| `DATABASE_SSL` | `true` on Render (also set in `render.yaml` by default) |
-| `TOKEN_SECRET` | Long random string (Blueprint can generate)             |
-| `CORS_ORIGIN`  | Vercel site origin(s), comma-separated                  |
-| `RATE_LIMIT_*` | Optional; defaults match `render.yaml`                  |
+| Key                                                | Notes                                                                                                 |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `NODE_ENV`                                         | `production`                                                                                          |
+| `DATABASE_URL`                                     | Neon pooled connection string                                                                         |
+| `DATABASE_SSL`                                     | `true` on Render (also set in `render.yaml` by default)                                               |
+| `TOKEN_SECRET`                                     | Long random string (Blueprint can generate)                                                           |
+| `CORS_ORIGIN`                                      | Vercel site origin(s), comma-separated                                                                |
+| `RATE_LIMIT_*`                                     | Optional; defaults match `render.yaml`                                                                |
+| `AUTH_DEMO_ENABLED`                                | Demo guest + email/password (`render.yaml` default `true`). Disable when OIDC is primary.             |
+| `AUTH_OIDC_ENABLED`                                | Set `true` and configure Auth0 vars to enable OIDC (`render.yaml` default `false`).                   |
+| `AUTH_OIDC_*`, `AUTH_FRONTEND_ORIGIN`, `SESSION_*` | See **[Auth0 OIDC setup](auth0-setup.md)** for split deploy, callback URL, and cookie SameSite rules. |
 
 After deploy, confirm: `https://<your-service>.onrender.com/api/health` returns **200**.
 

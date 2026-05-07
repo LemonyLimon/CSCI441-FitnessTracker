@@ -22,6 +22,7 @@ This mini app follows the same split deployment strategy as the main project.
   - `RATE_LIMIT_WINDOW_MS`
   - `RATE_LIMIT_MAX`
   - `RATE_LIMIT_WRITE_MAX`
+- **Auth0 OIDC (optional):** `AUTH_OIDC_ENABLED`, `AUTH_OIDC_ISSUER`, `AUTH_OIDC_CLIENT_ID`, `AUTH_OIDC_CLIENT_SECRET`, `AUTH_OIDC_REDIRECT_URI`, optional `AUTH_FRONTEND_ORIGIN` for Vercel + Render fragment handoff, `SESSION_SECRET` / session TTLs, `AUTH_DEMO_ENABLED`. Full table and Auth0 dashboard checklist: **[`docs/deployment/auth0-setup.md`](deployment/auth0-setup.md)**.
 
 ### Vercel (Client)
 

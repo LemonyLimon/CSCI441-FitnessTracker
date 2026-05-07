@@ -6,6 +6,10 @@ The format is inspired by Keep a Changelog and uses semantic-style version secti
 
 ## [Unreleased]
 
+### Added
+
+- **Auth0 OIDC (Path A):** server routes `GET /api/auth/options`, `GET /api/auth/oidc/login`, `GET /api/auth/oidc/callback`, `POST /api/auth/logout`; PKCE + `openid-client`; signed cookies `ftrack_session` / `ftrack_oidc_login`; Bearer-from-header then cookie auth; optional `#oidc_token=` redirect for split Vercel + Render; demo email/password and guest gated by `AUTH_DEMO_ENABLED`. Client: fragment bootstrap, auth options-driven UI, MSW updates. Docs: [`docs/deployment/auth0-setup.md`](docs/deployment/auth0-setup.md), proposal [`docs/proposals/auth0-oidc-path-a-build-proposal.md`](docs/proposals/auth0-oidc-path-a-build-proposal.md).
+
 ### Changed
 
 - **Breaking (API):** goal resources returned from `/api/me/goals` use field **`goalId`** instead of `id`. Exercise catalog routes live under **`/api/exercise-types`** (replacing the old `/api/exercises` catalog paths).
